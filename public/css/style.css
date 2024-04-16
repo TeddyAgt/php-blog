@@ -90,6 +90,11 @@ a {
   box-shadow: var(--box-shadow);
 }
 
+.small {
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
 /* Container */
 
 .container {

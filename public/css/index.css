@@ -1,3 +1,9 @@
+.categories-container h2 {
+  text-transform: capitalize;
+  margin-left: 10px;
+  margin-top: 20px;
+}
+
 .articles-container {
   display: flex;
   flex-flow: row wrap;
@@ -16,7 +22,7 @@
   transform: scale(1.05);
 }
 
-.article h2 {
+.article h3 {
   font-size: 1.7rem;
   padding: 1rem 1.5rem;
 }
@@ -26,4 +32,27 @@
   background-position: center;
   background-size: cover;
   transition: transform 0.3s;
+}
+
+.newsfeed-container {
+  display: flex;
+}
+
+aside {
+  flex: 200px;
+}
+
+.category-list__category {
+  margin-block: 1rem;
+  text-transform: capitalize;
+  transition: color 0.2s;
+}
+
+.category-list__category:hover {
+  color: var(--primary-dark);
+}
+
+.category-list__category--selected {
+  color: var(--primary-dark);
+  font-weight: 700;
 }
