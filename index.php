@@ -67,13 +67,13 @@ if (file_exists($filename)) {
 
                             <div class="articles-container">
                                 <?php foreach ($articlesPerCategories[$cat] as $a) : ?>
-                                    <article class="article block">
+                                    <a href="/show-article.php?id=<?= $a['id']; ?>" class="article block">
                                         <div class="overflow">
                                             <div class="img-container" style="background-image:url(<?= $a["image"] ?>)"></div>
                                         </div>
                                         <h3><?= $a["title"]; ?></h3>
 
-                                    </article>
+                                    </a>
                                 <?php endforeach; ?>
                             </div>
                         <?php endforeach; ?>
@@ -84,13 +84,13 @@ if (file_exists($filename)) {
 
                         <div class="articles-container">
                             <?php foreach ($articlesPerCategories[$selectedCategory] as $a) : ?>
-                                <article class="article block">
+                                <a href="/show-article.php?id=<?= $a['id']; ?>" class="article block">
                                     <div class="overflow">
                                         <div class="img-container" style="background-image:url(<?= $a["image"] ?>)"></div>
                                     </div>
                                     <h3><?= $a["title"]; ?></h3>
 
-                                </article>
+                                </a>
                             <?php endforeach; ?>
                         </div>
 
