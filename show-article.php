@@ -1,6 +1,5 @@
 <?php
-$pdo = require_once "./database.php";
-$statement = $pdo->prepare("SELECT * FROM article WHERE article_id=:articleId");
+$articleDB = require_once __DIR__ . "/database/models/ArticleDB.php";
 $_GET = filter_input_array(INPUT_GET, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 $articleId = $_GET["id"] ?? "";
 
@@ -8,9 +7,7 @@ if (!$articleId) {
     // S'il n'y a pas d'id on redirige vers la page d'accueil
     header("Location: /");
 } else {
-    $statement->bindValue(":articleId", $articleId);
-    $statement->execute();
-    $article = $statement->fetch();
+    $article = $articleDB->fetchOne($articleId);
 }
 
 

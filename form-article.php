@@ -1,24 +1,5 @@
 <?php
-$pdo = require_once "./database.php";
-$statementCreateOne = $pdo->prepare("INSERT INTO article (
-    article_title,
-    article_image,
-    article_category,
-    article_content
-) VALUES (
-    :title,
-    :image,
-    :category,
-    :content
-)");
-$statementUpdateOne = $pdo->prepare("UPDATE article SET 
-    article_title=:title,
-    article_image=:image,
-    article_category=:category,
-    article_content=:content
-    WHERE article_id=:articleId
-    ");
-$statementReadOne = $pdo->prepare("SELECT * FROM article WHERE article_id=:articleId");
+$articleDB = require_once __DIR__ . "/database/models/ArticleDB.php";
 
 const ERROR_REQUIRED = "Veuillez renseigner ce champs";
 const ERROR_TITLE_TOO_SHORT = "Le titre doit faire 8 caractères minimum";
@@ -37,13 +18,11 @@ $errors = [
 ];
 
 if ($articleId) {
-    $statementReadOne->bindvalue(":articleId", $articleId);
-    $statementReadOne->execute();
-    $article = $statementReadOne->fetch();
-    $title = $article["article_title"];
-    $image = $article["article_image"];
-    $category = $article["article_category"];
-    $content = $article["article_content"];
+    $article = $articleDB->fetchOne($articleId);
+    $title = $article['article_title'];
+    $image = $article['article_image'];
+    $category = $article['article_category'];
+    $content = $article['article_content'];
 }
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
@@ -89,22 +68,18 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     if (!count(array_filter($errors, fn ($e) => $e !== ""))) {
 
         if ($articleId) {
-            // $article["article_title"] = $title;
-            // $article["article_image"] = $image;
-            // $article["article_category"] = $category;
-            // $article["article_content"] = $content;
-            $statementUpdateOne->bindvalue(":title", $title);
-            $statementUpdateOne->bindvalue(":image", $image);
-            $statementUpdateOne->bindvalue(":category", $category);
-            $statementUpdateOne->bindvalue(":content", $content);
-            $statementUpdateOne->bindvalue(":articleId", $articleId);
-            $statementUpdateOne->execute();
+            $article["article_title"] = $title;
+            $article["article_image"] = $image;
+            $article["article_category"] = $category;
+            $article["article_content"] = $content;
+            $articleDB->updateOne($article);
         } else {
-            $statementCreateOne->bindvalue(":title", $title);
-            $statementCreateOne->bindvalue(":image", $image);
-            $statementCreateOne->bindvalue(":category", $category);
-            $statementCreateOne->bindvalue(":content", $content);
-            $statementCreateOne->execute();
+            $articleDB->createOne([
+                "article_title" => $title,
+                "article_image" => $image,
+                "article_category" => $category,
+                "article_content" => $content
+            ]);
         }
         header("Location: /");
     }
