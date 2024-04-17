@@ -7,10 +7,6 @@ const ERROR_PASSWORD_TOO_SHORT = "Le mot de passe doit faire au moins 6 caractè
 const ERROR_PASSWORD_MISMATCH = "Le mot de passe de confirmation ne correspond pas";
 const ERROR_EMAIL_INVALID = "L'adresse mail n'est pas valide";
 
-$_GET = filter_input_array(INPUT_GET, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-$articleId = $_GET["id"] ?? "";
-$filename = __DIR__ . "/data/articles.json";
-$category = "";
 $errors = [
     "firstname" => "",
     "lastname" => "",
