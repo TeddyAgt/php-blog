@@ -31,6 +31,13 @@
   padding-inline: 1.6rem;
 }
 
+.article-author {
+  text-align: right;
+  font-size: 1.4rem;
+  font-weight: 700;
+  font-style: italic;
+}
+
 .actions {
   display: flex;
   align-items: flex-end;

@@ -27,6 +27,9 @@ $errors = [
 
 if ($articleId) {
     $article = $articleDB->fetchOne($articleId);
+    if ($article["article_author"] !== $currentUser["user_id"]) {
+        header("Location: /");
+    }
     $title = $article['article_title'];
     $image = $article['article_image'];
     $category = $article['article_category'];

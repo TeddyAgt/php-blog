@@ -37,7 +37,7 @@ if (!$articleId) {
                 <h1 class="article-title"><?= $article["article_title"]; ?></h1>
                 <div class="separator"></div>
                 <p class="article-content"><?= $article["article_content"]; ?></p>
-
+                <p class="article-author"><?= $article["user_firstname"] . " " . $article["user_lastname"]; ?></p>
                 <?php if ($currentUser && $currentUser["user_id"] === $article["article_author"]) : ?>
                     <div class="actions">
                         <a href="/form-article.php?id=<?= $article["article_id"]; ?>" class="btn btn-primary edit-btn">Éditer l'article</a>

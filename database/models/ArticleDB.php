@@ -1,18 +1,21 @@
 <?php
 class ArticleDB
 {
-    private $statementFetchOne;
-    private $statementFetchAll;
-    private $statementCreateOne;
-    private $statementUpdateOne;
-    private $statementDeleteOne;
+    private PDOStatement $statementFetchOne;
+    private PDOStatement $statementFetchAll;
+    private PDOStatement $statementFetchUserAll;
+    private PDOStatement $statementCreateOne;
+    private PDOStatement $statementUpdateOne;
+    private PDOStatement $statementDeleteOne;
 
     function __construct(private PDO $pdo)
     {
 
-        $this->statementFetchOne = $pdo->prepare("SELECT * FROM article WHERE article_id=:articleId");
+        $this->statementFetchOne = $pdo->prepare("SELECT article.*, user.user_firstname, user.user_lastname FROM article LEFT JOIN user ON article.article_author=user.user_id WHERE article.article_id=:articleId");
 
-        $this->statementFetchAll = $pdo->prepare("SELECT * FROM article");
+        $this->statementFetchAll = $pdo->prepare("SELECT article.*, user.user_firstname, user.user_lastname FROM article LEFT JOIN user ON article.article_author=user.user_id");
+
+        $this->statementFetchUserAll = $pdo->prepare("SELECT * FROM article WHERE article_author=:userId");
 
         $this->statementCreateOne = $pdo->prepare("INSERT INTO article (
             article_title,
@@ -39,20 +42,27 @@ class ArticleDB
         $this->statementDeleteOne = $pdo->prepare("DELETE FROM article WHERE article_id=:articleId");
     }
 
-    public function fetchOne(int $articleId)
+    public function fetchOne(int $articleId): array
     {
         $this->statementFetchOne->bindValue(":articleId", $articleId);
         $this->statementFetchOne->execute();
         return $this->statementFetchOne->fetch();
     }
 
-    public function fetchAll()
+    public function fetchAll(): array
     {
         $this->statementFetchAll->execute();
         return $this->statementFetchAll->fetchAll();
     }
 
-    public function createOne($article)
+    public function fetchUserArticles($userId): array
+    {
+        $this->statementFetchUserAll->bindValue(":userId", $userId);
+        $this->statementFetchUserAll->execute();
+        return $this->statementFetchUserAll->fetchAll();
+    }
+
+    public function createOne($article): array
     {
         $this->statementCreateOne->bindvalue(":title", $article["article_title"]);
         $this->statementCreateOne->bindvalue(":image", $article["article_image"]);
@@ -63,7 +73,7 @@ class ArticleDB
         return $this->fetchOne($this->pdo->lastInsertId());
     }
 
-    public function updateOne($article)
+    public function updateOne($article): array
     {
         $this->statementUpdateOne->bindvalue(":title", $article["article_title"]);
         $this->statementUpdateOne->bindvalue(":image", $article["article_image"]);
@@ -74,7 +84,7 @@ class ArticleDB
         return $article;
     }
 
-    public function deleteOne(int $articleId)
+    public function deleteOne(int $articleId): string
     {
         $this->statementDeleteOne->bindvalue(":articleId", $articleId);
         $this->statementDeleteOne->execute();
