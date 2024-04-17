@@ -29,11 +29,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
 
     $_POST = filter_input_array(INPUT_POST, [
-        "title" => FILTER_SANITIZE_FULL_SPECIAL_CHARS,
+        "title" => FILTER_SANITIZE_SPECIAL_CHARS,
         "image" => FILTER_SANITIZE_URL,
-        "category" => FILTER_SANITIZE_FULL_SPECIAL_CHARS,
+        "category" => FILTER_SANITIZE_SPECIAL_CHARS,
         "content" => [
-            "filter" => FILTER_SANITIZE_FULL_SPECIAL_CHARS,
+            "filter" => FILTER_SANITIZE_SPECIAL_CHARS,
             "flags" => FILTER_FLAG_NO_ENCODE_QUOTES
         ]
     ]);
@@ -92,7 +92,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
 <head>
     <?php require_once "./includes/head.php" ?>
-    <link rel="stylesheet" href="./public/css/form-article.css">
     <title><?= $articleId ? "Éditer" : "Écrire"; ?> un article | Blog</title>
 </head>
 
