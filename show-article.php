@@ -1,4 +1,9 @@
 <?php
+require_once __DIR__ . "/database/database.php";
+require_once __DIR__ . "/database/security.php";
+
+$currentUser = isLoggedIn();
+
 $articleDB = require_once __DIR__ . "/database/models/ArticleDB.php";
 $_GET = filter_input_array(INPUT_GET, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 $articleId = $_GET["id"] ?? "";
@@ -9,11 +14,6 @@ if (!$articleId) {
 } else {
     $article = $articleDB->fetchOne($articleId);
 }
-
-
-
-
-
 
 ?>
 
@@ -38,10 +38,12 @@ if (!$articleId) {
                 <div class="separator"></div>
                 <p class="article-content"><?= $article["article_content"]; ?></p>
 
-                <div class="actions">
-                    <a href="/form-article.php?id=<?= $article["article_id"]; ?>" class="btn btn-primary edit-btn">Éditer l'article</a>
-                    <a href="/delete-article.php?id=<?= $article["article_id"]; ?>" class="btn btn-red delete-btn">Supprimer l'article</a>
-                </div>
+                <?php if ($currentUser && $currentUser["user_id"] === $article["article_author"]) : ?>
+                    <div class="actions">
+                        <a href="/form-article.php?id=<?= $article["article_id"]; ?>" class="btn btn-primary edit-btn">Éditer l'article</a>
+                        <a href="/delete-article.php?id=<?= $article["article_id"]; ?>" class="btn btn-red delete-btn">Supprimer l'article</a>
+                    </div>
+                <?php endif; ?>
             </article>
 
 

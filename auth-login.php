@@ -11,8 +11,6 @@ $errors = [
     "password" => ""
 ];
 
-
-
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $input = filter_input_array(INPUT_POST, [
         "email" => FILTER_SANITIZE_EMAIL

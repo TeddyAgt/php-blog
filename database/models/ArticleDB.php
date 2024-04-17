@@ -1,7 +1,4 @@
 <?php
-
-$pdo = require_once __DIR__ . "/../database.php";
-
 class ArticleDB
 {
     private $statementFetchOne;
@@ -21,12 +18,14 @@ class ArticleDB
             article_title,
             article_image,
             article_category,
-            article_content
+            article_content,
+            article_author
         ) VALUES (
             :title,
             :image,
             :category,
-            :content
+            :content,
+            :userId
         )");
 
         $this->statementUpdateOne = $pdo->prepare("UPDATE article SET 
@@ -59,6 +58,7 @@ class ArticleDB
         $this->statementCreateOne->bindvalue(":image", $article["article_image"]);
         $this->statementCreateOne->bindvalue(":category", $article["article_category"]);
         $this->statementCreateOne->bindvalue(":content", $article["article_content"]);
+        $this->statementCreateOne->bindvalue(":userId", $article["article_author"]);
         $this->statementCreateOne->execute();
         return $this->fetchOne($this->pdo->lastInsertId());
     }

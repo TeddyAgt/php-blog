@@ -1,6 +1,14 @@
 <?php
-$articleDB = require_once __DIR__ . "/database/models/ArticleDB.php";
+require_once __DIR__ . "/database/database.php";
+require_once __DIR__ . "/database/security.php";
 
+$currentUser = isLoggedIn();
+
+if (!$currentUser) {
+    header("Location: /auth-login.php");
+}
+
+$articleDB = require_once __DIR__ . "/database/models/ArticleDB.php";
 const ERROR_REQUIRED = "Veuillez renseigner ce champs";
 const ERROR_TITLE_TOO_SHORT = "Le titre doit faire 8 caractères minimum";
 const ERROR_CONTENT_TOO_SHORT = "L'article doit faire 50 caractères minimum";
@@ -78,7 +86,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 "article_title" => $title,
                 "article_image" => $image,
                 "article_category" => $category,
-                "article_content" => $content
+                "article_content" => $content,
+                "article_author" => $currentUser["user_id"]
             ]);
         }
         header("Location: /");

@@ -1,5 +1,8 @@
 <?php
-$articleDB = require_once __DIR__ . "/database/models/ArticleDB.php";
+require __DIR__ . "/database/database.php";
+require  __DIR__ . "/database/security.php";
+$articleDB = require __DIR__ . "/database/models/ArticleDB.php";
+$currentUser = isLoggedIn();
 $articles = $articleDB->fetchAll();
 $categories = [];
 
