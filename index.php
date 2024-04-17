@@ -1,14 +1,15 @@
 <?php
-$filename = __DIR__ . "/data/articles.json";
-$articles = [];
+$pdo = require_once "./database.php";
+$statement = $pdo->prepare("SELECT * FROM article");
+$statement->execute();
+$articles = $statement->fetchAll();
 $categories = [];
 
 $_GET = filter_input_array(INPUT_GET, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 $selectedCategory = $_GET["cat"] ?? "";
 
-if (file_exists($filename)) {
-    $articles = json_decode(file_get_contents($filename), true) ?? [];
-    $cattmp = array_map(fn ($a) => $a["category"], $articles);
+if (count($articles)) {
+    $cattmp = array_map(fn ($a) => $a["article_category"], $articles);
     $categories = array_reduce($cattmp, function ($acc, $curr) {
         if (isset($acc[$curr])) {
             $acc[$curr]++;
@@ -19,10 +20,10 @@ if (file_exists($filename)) {
     }, []);
 
     $articlesPerCategories = array_reduce($articles, function ($acc, $article) {
-        if (isset($acc[$article["category"]])) {
-            $acc[$article["category"]] = [...$acc[$article["category"]], $article];
+        if (isset($acc[$article["article_category"]])) {
+            $acc[$article["article_category"]] = [...$acc[$article["article_category"]], $article];
         } else {
-            $acc[$article["category"]] = [$article];
+            $acc[$article["article_category"]] = [$article];
         }
         return $acc;
     }, []);
@@ -67,11 +68,11 @@ if (file_exists($filename)) {
 
                             <div class="articles-container">
                                 <?php foreach ($articlesPerCategories[$cat] as $a) : ?>
-                                    <a href="/show-article.php?id=<?= $a['id']; ?>" class="article block">
+                                    <a href="/show-article.php?id=<?= $a['article_id']; ?>" class="article block">
                                         <div class="overflow">
-                                            <div class="img-container" style="background-image:url(<?= $a["image"] ?>)"></div>
+                                            <div class="img-container" style="background-image:url(<?= $a["article_image"] ?>)"></div>
                                         </div>
-                                        <h3><?= $a["title"]; ?></h3>
+                                        <h3><?= $a["article_title"]; ?></h3>
 
                                     </a>
                                 <?php endforeach; ?>
@@ -84,11 +85,11 @@ if (file_exists($filename)) {
 
                         <div class="articles-container">
                             <?php foreach ($articlesPerCategories[$selectedCategory] as $a) : ?>
-                                <a href="/show-article.php?id=<?= $a['id']; ?>" class="article block">
+                                <a href="/show-article.php?id=<?= $a['article_id']; ?>" class="article block">
                                     <div class="overflow">
-                                        <div class="img-container" style="background-image:url(<?= $a["image"] ?>)"></div>
+                                        <div class="img-container" style="background-image:url(<?= $a["article_image"] ?>)"></div>
                                     </div>
-                                    <h3><?= $a["title"]; ?></h3>
+                                    <h3><?= $a["article_title"]; ?></h3>
 
                                 </a>
                             <?php endforeach; ?>
