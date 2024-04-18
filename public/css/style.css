@@ -109,6 +109,7 @@ a {
 /* Header */
 
 header {
+  position: relative;
   background: var(--primary);
   padding: 1.5rem;
   box-shadow: var(--box-shadow);
@@ -142,6 +143,40 @@ header {
 
 .main-navigation a.active {
   background: var(--primary-dark);
+}
+
+.mobile-menu-toggler {
+  display: none;
+  border: none;
+  background: none;
+  padding: 8px;
+  cursor: pointer;
+  font-size: 1.8rem;
+  color: #fff;
+}
+
+@media screen and (max-width: 800px) {
+  .main-navigation {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background: var(--primary);
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 16px;
+    z-index: 2;
+  }
+
+  .main-navigation.visible {
+    display: flex;
+  }
+
+  .mobile-menu-toggler {
+    display: block;
+  }
 }
 
 /* Content */
