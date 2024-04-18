@@ -1,8 +1,9 @@
 <?php
 require __DIR__ . "/database/database.php";
-require  __DIR__ . "/database/security.php";
+$authDB = require_once "./database/security.php";
 $articleDB = require __DIR__ . "/database/models/ArticleDB.php";
-$currentUser = isLoggedIn();
+
+$currentUser = $authDB->isLoggedIn();
 $articles = $articleDB->fetchAll();
 $categories = [];
 
